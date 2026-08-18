@@ -288,13 +288,14 @@
 
     <div id="render-box">
         <div id="credencial-card">
-<div class="logo-container">
-    <img 
-        id="logo-img"
-        src="logo.jpg"
-        alt="Logos Institucionais"
-    >
-</div>
+            <div class="logo-container">
+                <img 
+                    id="logo-img"
+                    src="logo.jpg"
+                    alt="Logos Institucionais"
+                    crossorigin="anonymous"
+                >
+            </div>
             <div class="user-info">
                 <div class="info-label">Profissional</div>
                 <div class="info-nome" id="card-nome">SEU NOME</div>
@@ -398,6 +399,7 @@
             const statusText = document.getElementById("status");
             const card = document.getElementById("credencial-card");
             const qrContainer = document.getElementById("qrcode-canvas");
+            const logoImg = document.getElementById("logo-img");
 
             try {
                 statusText.innerText = "Processando imagem...";
@@ -430,7 +432,7 @@
 
                         return new Promise((resolve, reject) => {
                             img.onload = resolve;
-                            img.onerror = reject;
+                            img.onerror = () => reject(new Error("Imagem não carregou: " + img.src));
                         });
                     })
                 );
@@ -439,7 +441,8 @@
                     quality: 0.95,
                     pixelRatio: Math.min(window.devicePixelRatio || 1, 2),
                     cacheBust: false,
-                    backgroundColor: "#ffffff"
+                    backgroundColor: "#ffffff",
+                    useCORS: true
                 });
 
                 imagemUrlPronta = dataUrl;
@@ -453,7 +456,8 @@
                 statusText.innerText = "Credencial gerada!";
             } catch (error) {
                 console.error("Detalhes do erro:", error);
-                alert("Erro ao congelar imagem do crachá: " + (error.message || error));
+                const mensagemErro = error.message || error.toString();
+                alert("Erro ao congelar imagem do crachá: " + mensagemErro);
                 statusText.innerText = "Erro ao gerar imagem.";
             }
         });
@@ -517,5 +521,5 @@
         });
     </script>
 </body>
-	V.5.3
+V.5.3.1
 </html>
