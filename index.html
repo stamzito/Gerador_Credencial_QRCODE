@@ -160,22 +160,6 @@
             overflow: hidden;
         }
 
-        /* Tamanho reduzido para mobile */
-        @media (max-width: 768px) {
-            #credencial-card {
-                width: 280px !important;
-                height: 445px !important;
-            }
-            
-            .info-nome {
-                font-size: 1.2rem !important;
-            }
-            
-            .info-id {
-                font-size: 1.4rem !important;
-            }
-        }
-
         .logo-container {
             width: 100%;
             padding: 0 25px;
@@ -259,17 +243,6 @@
             height: 540px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
             background-color: #fff;
-        }
-
-        @media (max-width: 768px) {
-            #snapshot-img {
-                width: 280px !important;
-                height: 445px !important;
-            }
-            
-            #download-btn {
-                width: 280px !important;
-            }
         }
 
         #download-btn {
@@ -436,22 +409,26 @@
 
                 new QRCode(qrContainer, {
                     text: String(idDetectado),
-                    width: 145,
-                    height: 145,
+                    width: 175,
+                    height: 175,
                     colorDark: "#000000",
                     colorLight: "#ffffff",
                     correctLevel: QRCode.CorrectLevel.H
                 });
 
-                // Aguarda renderização
-                await new Promise(resolve => setTimeout(resolve, 150));
+                // Aguarda 2 frames de renderização
+                await new Promise(resolve => setTimeout(resolve, 100));
 
-                // Gera a imagem
+                // Gera a imagem com configurações otimizadas para celular
                 const dataUrl = await htmlToImage.toPng(card, {
                     quality: 0.8,
                     pixelRatio: 1,
                     cacheBust: true,
-                    backgroundColor: "#ffffff"
+                    backgroundColor: "#ffffff",
+                    style: {
+                        transform: 'scale(1)',
+                        transformOrigin: 'top left'
+                    }
                 });
 
                 imagemUrlPronta = dataUrl;
@@ -464,7 +441,7 @@
 
                 statusText.innerText = "✓ Credencial gerada!";
             } catch (error) {
-                console.error("Erro:", error);
+                console.error("Erro completo:", error);
                 const mensagemErro = error.message || error.toString();
                 alert("Erro: " + mensagemErro);
                 statusText.innerText = "❌ Erro ao gerar.";
@@ -530,5 +507,5 @@
         });
     </script>
 </body>
-    V:5.1.4
+    V:5.1.4GPT
 </html>
