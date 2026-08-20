@@ -1483,164 +1483,74 @@
          */
 
         downloadBtn.addEventListener(
-            "click",
-            function () {
+    "click",
+    function () {
 
-                if (!imagemUrlPronta) {
+        if (!imagemUrlPronta) {
 
-                    alert(
-                        "Gere a credencial antes de tentar baixar."
-                    );
+            alert(
+                "Gere a credencial antes de tentar baixar."
+            );
 
-                    return;
-                }
+            return;
+        }
 
+        const nome =
+            nomeInput.value
+                .trim()
+                .toUpperCase();
 
-                const nome =
-                    nomeInput.value
-                        .trim()
-                        .toUpperCase();
+        const nomeParaArquivo =
+            nome
+                ? nome.replace(
+                    /[^\p{L}\p{N}]+/gu,
+                    "_"
+                )
+                : "CREDENCIAL";
 
+        /*
+         * Cria um link temporário.
+         */
+        const link =
+            document.createElement("a");
 
-                const nomeParaArquivo =
-                    nome
-                        ? nome.replace(
-                            /[^\p{L}\p{N}]+/gu,
-                            "_"
-                        )
-                        : "CREDENCIAL";
+        link.href =
+            imagemUrlPronta;
 
+        link.download =
+            nomeParaArquivo + ".png";
 
-                /*
-                 * Abre nova aba.
-                 */
+        /*
+         * O link não precisa aparecer
+         * na tela.
+         */
+        link.style.display =
+            "none";
 
-                const novaAba =
-                    window.open(
-                        "",
-                        "_blank"
-                    );
-
-
-                if (!novaAba) {
-
-                    alert(
-                        "Permita pop-ups no navegador para salvar a imagem."
-                    );
-
-                    return;
-                }
-
-
-                /*
-                 * Página de salvamento.
-                 */
-
-                novaAba.document.open();
-
-
-                novaAba.document.write(
-                    `
-                    <!DOCTYPE html>
-
-                    <html lang="pt-BR">
-
-                    <head>
-
-                        <meta charset="UTF-8">
-
-                        <meta
-                            name="viewport"
-                            content="width=device-width, initial-scale=1"
-                        >
-
-                        <title>
-                            ${nomeParaArquivo}
-                        </title>
-
-                        <style>
-
-                            * {
-                                box-sizing: border-box;
-                            }
-
-                            body {
-
-                                margin: 0;
-
-                                padding: 16px;
-
-                                background: #f1f5f9;
-
-                                text-align: center;
-
-                                font-family:
-                                    Arial,
-                                    sans-serif;
-
-                            }
-
-                            img {
-
-                                display: block;
-
-                                width: 680px;
-
-                                max-width: 100%;
-
-                                height: auto;
-
-                                margin:
-                                    0 auto 16px auto;
-
-                                background:
-                                    #ffffff;
-
-                            }
-
-                            p {
-
-                                color:
-                                    #334155;
-
-                                font-size:
-                                    15px;
-
-                                line-height:
-                                    1.4;
-
-                            }
-
-                        </style>
-
-                    </head>
-
-                    <body>
-
-                        <img
-                            src="${imagemUrlPronta}"
-                            alt="Credencial"
-                        >
-
-                        <p>
-                            Pressione e segure a imagem
-                            para salvar a credencial.
-                        </p>
-
-                    </body>
-
-                    </html>
-                    `
-                );
-
-
-                novaAba.document.close();
-
-            }
+        document.body.appendChild(
+            link
         );
+
+        /*
+         * Dispara o download.
+         */
+        link.click();
+
+        /*
+         * Remove o link depois.
+         */
+        setTimeout(
+            function () {
+                document.body.removeChild(link);
+            },
+            100
+        );
+
+    }
+);
 
     </script>
 
 </body>
-V: 5.2.2
+V: 5.2.3
 </html>
